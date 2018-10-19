@@ -1,0 +1,68 @@
+---
+title: "Vignette Title"
+author: "Vignette Author"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+## Statstics and Simulation
+
+```{r}
+library(ResampleProps)
+```
+
+The big idea is that we simulate things because we can.  In old school statistics, the limitations were imposed by the difficulty and need for obtaining analytical solutions.  We can use the computer and sampling to replace these arcane mathematical troubles.  
+
+### Means
+
+Indeed, the general t equation is meant as the analytical approximation to the sampling distribution of the mean assuming the central limit holds.  Let me show this with a sample from a log-normal distribution.
+
+```{r}
+The.Quant.Data <- rlnorm(100)
+plot(density(The.Quant.Data))
+```
+
+Now invoking the function and comparing it to the analytical result, we get a plot like:
+
+```{r}
+My.Means <- ResampleMean(The.Quant.Data)
+plot(density(My.Means))
+lines(density(mean(The.Quant.Data)-rt(1000, df=99)*(sd(The.Quant.Data)/sqrt(100))))
+```
+
+And an analytical result that looks like:
+
+```{r}
+t.test(The.Quant.Data)
+quantile(My.Means, c(0.025, 0.975))
+```
+
+### Proportions
+
+The exact same idea applies to proportions based on binary data.  I will internally generate some Bernoulli trials for this.  Let me first show a table of the data and embed the function.
+
+```{r}
+The.Data <- rbinom(100, size=1, 0.4)
+table(The.Data)
+```
+
+The command `resample.prop` requires a vector of data with two outcomes of whatever form.  Yes and No, True and False, Up and Down, or 0 and 1, or even 0 and 10000.  As long as it is binary, the code will work.  It also has a key option, `tab.col` which embeds whether you want the first `1` or second `2` column of the table. Here, I will use 2 because I want the probability of *1* on this.
+
+```{r}
+My.Props <- ResampleProp(The.Data, tab.col = 2)
+binom.test(table(-1*The.Data))
+quantile(My.Props, c(0.025,0.975))
+```
+
+It is worth noting that the exact binomial is not an approximation, resample props is just in the interests of completeness or a better approach than a normal approximation.

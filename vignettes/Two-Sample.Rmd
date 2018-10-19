@@ -1,0 +1,21 @@
+---
+title: "Independent Two Sample Comparisons"
+author: "Robert W. Walker"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Independent Two Sample Comparisons}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+## Two Sample Problems
+
+These could be solved with a simple application of the one sample simulators.  In theory, we would just randomly sample from the one-sample means and difference the two drawn means.  Indeed, all the function does is black box that process without relying on the single sample results.

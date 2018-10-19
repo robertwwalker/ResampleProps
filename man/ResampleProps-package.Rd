@@ -6,7 +6,7 @@
 \alias{ResampleProps-package}
 \title{ResampleProps: Resample One and Two Sample Means and Proportions}
 \description{
-THe package contains four commands designed to create the sampling distributions of means and proportions in one sample and in two independent samples.
+The package contains four commands designed to create the sampling distributions of means and proportions in one sample and in two independent samples.
 }
 \seealso{
 Useful links:

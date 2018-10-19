@@ -1,3 +1,4 @@
+#' @export
 ResampleDiffMeans <- function(vec.1, vec.2, k=1000) {
   ifelse((is.vector(vec.1) & is.numeric(vec.1) & is.vector(vec.2) & is.numeric(vec.2))  ,{
     vec.1 <- vec.1[stats::complete.cases(vec.1)]

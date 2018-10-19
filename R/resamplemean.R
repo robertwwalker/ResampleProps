@@ -1,3 +1,4 @@
+#' @export
 ResampleMean <- function(vec.data, k=1000) {
   ifelse((is.vector(vec.data) & is.numeric(vec.data))  ,{
     vec.data <- vec.data[stats::complete.cases(vec.data)]

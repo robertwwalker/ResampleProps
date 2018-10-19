@@ -1,3 +1,4 @@
+#' @export
 ResampleDiffProps <- function(vec.1, vec.2, k=1000, tab.col=1) {
   vec.1 <- vec.1[stats::complete.cases(vec.1)]
   vec.2 <- vec.2[stats::complete.cases(vec.2)]

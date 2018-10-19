@@ -12,3 +12,7 @@ Encoding: UTF-8
 LazyData: true
 URL: https://github.com/robertwwalker/ResampleProps
 BugReports: https://github.com/robertwwalker/ResampleProps/issues
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 6.1.0
+Imports: 
+    stats

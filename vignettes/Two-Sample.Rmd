@@ -16,6 +16,56 @@ knitr::opts_chunk$set(
 )
 ```
 
-## Two Sample Problems
+# Two Sample Problems
 
-These could be solved with a simple application of the one sample simulators.  In theory, we would just randomly sample from the one-sample means and difference the two drawn means.  Indeed, all the function does is black box that process without relying on the single sample results.
+These could be solved with a simple application of the one sample simulators.  In theory, we would just randomly sample from the one-sample means and difference the two drawn means.  Indeed, all the function does is black box that process without relying on the single sample results.  I will illustrate them with additions for the second sample.
+
+## Resampling a Difference of Means
+
+One of the hardest things to teach in classical statistics, at least for me, is the silliness of Independent samples t-tests in the presence of [the Behrens-Fisher problem](https://en.wikipedia.org/wiki/Behrens%E2%80%93Fisher_problem).  The idea that one must arbitrarily choose an equal or unequal variance result because one offers a better approximation when the two samples have different standard deviations but cannot be *fiducially* derived in the same way that the equal variance version can.  Given the question and the desire to avoid assumptions, the simplest possible way is to allow the simplicity of $\overline{x}_{1} - \overline{x}_{2}$$ to be directly sampled with heavy reliance on independence and randomness of the sample.
+
+### A Log Normal Example
+
+Let me show this with two samples from log-normal distributions, the second with logmean 0.25.
+
+```{r}
+library(ResampleProps)
+The.Quant.Data <- data.frame(Samp1=rlnorm(100),Samp2=rlnorm(100, meanlog=0.25))
+plot(density(The.Quant.Data$Samp1), main="Sample 1")
+```
+
+```{r, echo=FALSE}
+plot(density(The.Quant.Data$Samp2), main="Sample 2")
+```
+
+The difference of means command is `ResampleDiffMeans` and it takes two vectors as inputs seprated by commas.  There is an option k to control the resamples set to 1000 by default.
+
+```{r}
+TwoSampMeans <- ResampleDiffMeans(The.Quant.Data$Samp1,The.Quant.Data$Samp2)
+t.test(The.Quant.Data$Samp1,The.Quant.Data$Samp2)
+quantile(TwoSampMeans, c(0.025, 0.975))
+plot(density(TwoSampMeans), main="Difference of Means")
+```
+
+## Resampling a Difference of Proportions
+
+The exact same idea applies to proportions based on binary data.  I will internally generate some Bernoulli trials for this.  Let me first show a table of the data and embed the function.
+
+```{r}
+The.Data.1 <- rbinom(100, size=1, 0.4)
+The.Data.2 <- rbinom(100, size=1, 0.5)
+table(The.Data.1)
+table(The.Data.2)
+Res1 <- table(The.Data.1)[[2]]
+Res2 <- table(The.Data.2)[[2]]
+```
+
+The command `ResampleDiffProp` requires a vector of data with two outcomes of whatever form.  Yes and No, True and False, Up and Down, or 0 and 1, or even 0 and 10000.  As long as it is binary, the code will work.  It also has a key option, `tab.col` which embeds whether you want the first `1` or second `2` column of the table. Here, I will use 2 because I want the probability of *1* on this.
+
+```{r}
+My.Props <- ResampleDiffProps(The.Data.1, The.Data.2, tab.col = 2)
+prop.test(c(Res1,Res2), n=c(100,100))
+quantile(My.Props, c(0.025,0.975))
+plot(density(My.Props), main="Difference of Proportions")
+```
+

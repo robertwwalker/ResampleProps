@@ -51,9 +51,40 @@ Resampling a single proportion 1000 times is easy.
 My.Props <- ResampleProp(rbinom(100, size=1, prob = 0.4))
 summary(My.Props)
 ```
+
 ### Plot of the Resampled Proportions
 
 ```{r}
-plot(density(My.LNorm.Means), main="1000 LogNormal Means")
+plot(density(My.Props), main="1000 Sample Proportions")
 ```
 
+## Difference of Means
+
+Resampling the difference in two means.
+
+
+```{r ex3}
+My.LNorm.Means2 <- ResampleDiffMeans(rlnorm(100), rlnorm(100, meanlog = 0.7))
+summary(My.LNorm.Means2)
+```
+
+### Plot of the Resampled Means
+
+```{r}
+plot(density(My.LNorm.Means2), main="1000 Difference of Means")
+```
+
+## Twp Proportions
+
+Resampling a difference in proportions 1000 times is easy.
+
+```{r ex4}
+My.Props2 <- ResampleDiffProps(rbinom(100, size=1, prob = 0.4),rbinom(100, size=1, prob = 0.5))
+summary(My.Props2)
+```
+
+### Plot of the Resampled Difference in Proportions
+
+```{r}
+plot(density(My.Props2), main="1000 Differences in Proportions")
+```
